@@ -12,18 +12,28 @@ db.once('open', () => {
     title: String
   });
   Model = mongoose.model("model", bookSchema, "myCollection");
-  var book = new Model({title:"sex positions"});
-  book.save();
+  //var book = new Model({title:"sex positions"});
+  //book.save();
 });
 
 
 var router = express.Router();
+// delete database
+router.get('/delete', (req, res, next) => {
+  Model.deleteMany({title:req.query.title}, (e) =>{
+    console.log(e);
+    return;
+  });
+  console.log('successful deletion');
+  res.send('deleted');
+})
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/add', function(req, res, next) {
   console.log(req.query.title);
   var book = new Model({title:req.query.title});
   book.save();
+  res.render('index', {title: 'go fuck yourself'});
 });
 
 module.exports = router;
