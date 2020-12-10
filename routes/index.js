@@ -1,4 +1,5 @@
 var express = require('express');
+const { Int32 } = require('mongodb');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
 
@@ -9,7 +10,9 @@ var Model = null;
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => {
   const bookSchema = new mongoose.Schema({
-    title: String
+    title: String,
+    author: String,
+    isbn: String
   });
   Model = mongoose.model("model", bookSchema, "myCollection");
   //var book = new Model({title:"sex positions"});
@@ -30,8 +33,8 @@ router.get('/delete', (req, res, next) => {
 
 /* GET home page. */
 router.get('/add', function(req, res, next) {
-  console.log(req.query.title);
-  var book = new Model({title:req.query.title});
+  console.log(req.query);
+  var book = new Model(req.query);
   book.save();
   res.render('index', {title: 'go fuck yourself'});
 });
